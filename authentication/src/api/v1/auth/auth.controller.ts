@@ -5,7 +5,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { ValidationPipe } from 'src/lib/pipes/validation.pipe';
+import { ValidationPipe } from '../lib/pipes/validation.pipe';
 import { SignInDTO, SignUpDTO } from './auth.dto';
 import { AuthService } from './auth.service';
 
@@ -20,7 +20,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiBadRequestResponse({ description: 'Bad Request!!' })
   @ApiOkResponse({ description: 'OK' })
-  @Post('/signin/number')
+  @Post(['/signin/email', '/signin'])
   signinWithEmail(@Body(new ValidationPipe()) { email, password }: SignInDTO) {
     return true;
   }
@@ -32,7 +32,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiBadRequestResponse({ description: 'Bad Request!!' })
   @ApiOkResponse({ description: 'OK' })
-  @Post('/signup/email')
+  @Post(['/signup/email', '/signup'])
   signupWithEmail(@Body(new ValidationPipe()) { email, password }: SignUpDTO) {
     return true;
   }

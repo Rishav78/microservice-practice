@@ -1,14 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './lib/filters/http-exception.filter';
-import { BenchmarkInterceptor } from './lib/interceptor/benchmark.interceptor';
+import { AppModule } from './v1/app.module';
+import { HttpExceptionFilter } from './v1/lib/filters/http-exception.filter';
+import { BenchmarkInterceptor } from './v1/lib/interceptor/benchmark.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true, logger: true });
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new BenchmarkInterceptor());
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('URBANDHOBI')
