@@ -1,3 +1,4 @@
+import 'src/api/v1/lib/env';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './v1/app.module';
