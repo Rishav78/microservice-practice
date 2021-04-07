@@ -1,10 +1,10 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RouterModule, Routes } from 'nest-router';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { dbURL } from './lib/core/configuration/db';
+import { AppController } from '../controllers';
+import { AppService } from '../services';
+import { AuthModule } from './auth.module';
+import { dbURL } from '../lib/core/configuration/db';
 
 const routes: Routes = [
   {

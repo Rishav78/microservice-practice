@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  ConflictException,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiOkResponse,
@@ -6,10 +13,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ValidationPipe } from '../lib/pipes/validation.pipe';
-import { SignInDTO, SignUpDTO } from './auth.dto';
-import { AuthService } from './auth.service';
+import { SignInDTO, SignUpDTO } from '../lib/dto/auth.dto';
+import { AuthService } from '../services/auth.service';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -21,7 +28,10 @@ export class AuthController {
   @ApiBadRequestResponse({ description: 'Bad Request!!' })
   @ApiOkResponse({ description: 'OK' })
   @Post(['/signin/email', '/signin'])
-  signinWithEmail(@Body(new ValidationPipe()) { email, password }: SignInDTO) {
+  async signinWithEmail(
+    @Body(new ValidationPipe()) { email, password }: SignInDTO,
+  ) {
+    await this.authService.signin();
     return true;
   }
 
@@ -33,7 +43,17 @@ export class AuthController {
   @ApiBadRequestResponse({ description: 'Bad Request!!' })
   @ApiOkResponse({ description: 'OK' })
   @Post(['/signup/email', '/signup'])
-  signupWithEmail(@Body(new ValidationPipe()) { email, password }: SignUpDTO) {
-    return true;
+  async signupWithEmail(
+    @Body(new ValidationPipe()) { email, password }: SignUpDTO,
+  ) {
+    try {
+      if (await this.authService.existByEmail(email)) {
+        throw new ConflictException('this email already used by another user');
+      }
+      const auth = await this.authService.signupWithEmail(email, password);
+      return auth;
+    } catch (error) {
+      throw error;
+    }
   }
 }

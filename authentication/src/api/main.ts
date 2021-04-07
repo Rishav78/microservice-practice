@@ -1,7 +1,7 @@
 import 'src/api/v1/lib/env';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './v1/app.module';
+import { AppModule } from './v1/module';
 import { HttpExceptionFilter } from './v1/lib/filters/http-exception.filter';
 import { BenchmarkInterceptor } from './v1/lib/interceptor/benchmark.interceptor';
 
@@ -10,7 +10,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new BenchmarkInterceptor());
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api/auth');
 
   const config = new DocumentBuilder()
     .setTitle('URBANDHOBI')
@@ -19,7 +19,7 @@ async function bootstrap() {
     // .addTag('URBANDHOBI')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/auth', app, document);
 
   await app.listen(3000);
 }

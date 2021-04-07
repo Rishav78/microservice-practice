@@ -37,12 +37,15 @@ export const AuthSchema = new mongoose.Schema(
   },
 );
 
-export interface Auth extends mongoose.Document {
-  id: string;
+export interface Auth {
   email: string;
   password: string;
   active: boolean;
   isDeleted: boolean;
+}
+
+export interface AuthModelSchema extends Auth, mongoose.Document {
+  id: string;
   createdAt: Date;
   updatedAt: Date;
 }

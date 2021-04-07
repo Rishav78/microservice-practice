@@ -1,6 +1,6 @@
 import { Controller, Get, BadRequestException } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AppService } from './app.service';
+import { AppService } from '../services/app.service';
 
 @Controller({})
 export class AppController {
