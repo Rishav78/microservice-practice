@@ -2,6 +2,7 @@ import 'src/api/v1/lib/env';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './v1/module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { HttpExceptionFilter } from './v1/lib/filters/http-exception.filter';
 import { BenchmarkInterceptor } from './v1/lib/interceptor/benchmark.interceptor';
 

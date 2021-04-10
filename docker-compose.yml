@@ -9,10 +9,20 @@ services:
     depends_on: 
       - authentication
       - user
+      - rabbitmq
     volumes: 
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports: 
       - 80:80
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
+      - 15671:15671
+      - 5672:5672
 
   user:
     image: user
@@ -30,6 +40,8 @@ services:
   authentication:
     image: authentication
     container_name: authentication
+    depends_on:
+      - rabbitmq
     build: 
       context: ./authentication
       target: debug
@@ -37,5 +49,37 @@ services:
       - 3001:3000
     volumes: 
       - ./authentication:/app
+      - /app/node_modules
+    restart: always
+
+  # Authentication service
+  microservice1:
+    image: microservice1
+    container_name: microservice1
+    depends_on:
+      - rabbitmq
+    build: 
+      context: ./microservice1
+      target: debug
+    ports: 
+      - 3002:3000
+    volumes: 
+      - ./microservice1:/app
+      - /app/node_modules
+    restart: always
+
+  # Authentication service
+  microservice2:
+    image: microservice2
+    container_name: microservice2
+    depends_on:
+      - rabbitmq
+    build: 
+      context: ./microservice2
+      target: debug
+    ports: 
+      - 3003:3000
+    volumes: 
+      - ./microservice2:/app
       - /app/node_modules
     restart: always
