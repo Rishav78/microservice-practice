@@ -14,6 +14,7 @@ async function bootstrap() {
       },
     },
   });
+  app.setGlobalPrefix('microservice1');
   await app.startAllMicroservicesAsync();
   await app.listen(3000);
 }
